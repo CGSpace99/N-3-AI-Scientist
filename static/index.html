@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Scientist</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f5; color: #1a1a1a; min-height: 100vh; }
+.container { max-width: 900px; margin: 0 auto; padding: 2rem 1rem; }
+h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.2rem; }
+.subtitle { color: #666; font-size: 0.9rem; margin-bottom: 2rem; }
+
+.card { background: white; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.card-title { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: #333; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+
+.examples { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+.example-btn { background: #f0f0f0; border: 1px solid #ddd; border-radius: 6px; padding: 0.3rem 0.75rem; font-size: 0.8rem; cursor: pointer; transition: background 0.15s; font-family: inherit; }
+.example-btn:hover { background: #e0e0e0; }
+
+textarea { width: 100%; border: 1px solid #ddd; border-radius: 6px; padding: 0.75rem; font-size: 0.88rem; resize: vertical; min-height: 100px; font-family: inherit; line-height: 1.5; }
+textarea:focus { outline: none; border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
+
+.btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1.2rem; border-radius: 6px; font-size: 0.88rem; font-weight: 500; cursor: pointer; border: none; transition: all 0.15s; font-family: inherit; }
+.btn-primary { background: #4f46e5; color: white; }
+.btn-primary:hover:not(:disabled) { background: #4338ca; }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-sm { padding: 0.38rem 0.9rem; font-size: 0.82rem; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.field { }
+.field-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #888; margin-bottom: 0.2rem; }
+.field-value { font-size: 0.87rem; color: #222; line-height: 1.45; }
+
+.badge { display: inline-flex; align-items: center; padding: 0.2rem 0.65rem; border-radius: 999px; font-size: 0.76rem; font-weight: 600; }
+.badge-green  { background: #dcfce7; color: #166534; }
+.badge-yellow { background: #fef9c3; color: #854d0e; }
+.badge-red    { background: #fee2e2; color: #991b1b; }
+.badge-gray   { background: #f3f4f6; color: #4b5563; }
+.badge-blue   { background: #eff6ff; color: #1d4ed8; }
+
+.step-bar { display: flex; margin-bottom: 2rem; }
+.step { flex: 1; padding: 0.4rem 0.25rem; text-align: center; font-size: 0.76rem; font-weight: 500; color: #bbb; border-bottom: 2px solid #e5e7eb; transition: all 0.2s; }
+.step.active { color: #4f46e5; border-bottom-color: #4f46e5; }
+.step.done   { color: #16a34a; border-bottom-color: #16a34a; }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+th { text-align: left; font-size: 0.69rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #888; padding: 0.4rem 0.5rem; border-bottom: 1px solid #e5e7eb; }
+td { padding: 0.45rem 0.5rem; border-bottom: 1px solid #f3f4f6; vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+
+.tabs { display: flex; gap: 0; border-bottom: 1px solid #e5e7eb; margin-bottom: 1rem; overflow-x: auto; }
+.tab { padding: 0.5rem 1rem; font-size: 0.82rem; cursor: pointer; color: #666; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.15s; white-space: nowrap; font-family: inherit; background: none; border-left: none; border-right: none; border-top: none; }
+.tab.active { color: #4f46e5; border-bottom-color: #4f46e5; font-weight: 500; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.spinner { display: inline-block; width: 13px; height: 13px; border: 2px solid rgba(255,255,255,0.35); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.error-box { background: #fee2e2; border: 1px solid #fca5a5; border-radius: 6px; padding: 0.55rem 0.9rem; font-size: 0.83rem; color: #991b1b; }
+.success-msg { font-size: 0.85rem; color: #16a34a; font-weight: 500; }
+
+.score-bar { display: flex; align-items: center; gap: 0.75rem; }
+.score-track { flex: 1; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden; }
+.score-fill { height: 100%; background: #4f46e5; border-radius: 3px; transition: width 0.5s ease; }
+
+select { border: 1px solid #ddd; border-radius: 6px; padding: 0.5rem 0.75rem; font-size: 0.87rem; font-family: inherit; width: 100%; background: white; }
+select:focus { outline: none; border-color: #4f46e5; }
+
+.star-row { display: flex; gap: 0.2rem; margin-top: 0.3rem; }
+.star { font-size: 1.5rem; cursor: pointer; color: #d1d5db; transition: color 0.1s; user-select: none; }
+.star.on { color: #f59e0b; }
+
+.reference-item { padding: 0.65rem 0; border-bottom: 1px solid #f3f4f6; }
+.reference-item:last-child { border-bottom: none; }
+.reference-title { font-size: 0.88rem; font-weight: 500; }
+.reference-meta   { font-size: 0.77rem; color: #666; margin-top: 0.15rem; }
+.reference-reason { font-size: 0.77rem; color: #4f46e5; margin-top: 0.2rem; }
+
+.step-item { display: flex; gap: 0.75rem; padding: 0.65rem 0; border-bottom: 1px solid #f5f5f5; }
+.step-item:last-child { border-bottom: none; }
+.step-num { width: 24px; height: 24px; border-radius: 50%; background: #4f46e5; color: white; font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.1rem; }
+.step-body { flex: 1; }
+.step-phase { font-size: 0.69rem; color: #888; text-transform: uppercase; letter-spacing: 0.04em; }
+.step-title-text { font-size: 0.9rem; font-weight: 500; margin-top: 0.1rem; }
+.step-desc { font-size: 0.82rem; color: #555; margin-top: 0.2rem; line-height: 1.4; }
+.step-qc { font-size: 0.75rem; color: #16a34a; margin-top: 0.3rem; }
+
+.actions { display: flex; gap: 0.75rem; margin-top: 1rem; align-items: center; flex-wrap: wrap; }
+.hidden { display: none !important; }
+.divider { border: none; border-top: 1px solid #e5e7eb; margin: 1.25rem 0; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>AI Scientist</h1>
+  <p class="subtitle">Hypothesis → Literature QC → Relevant Protocols → Materials & Budget → Experiment Plan</p>
+
+  <div class="step-bar">
+    <div class="step active" id="step-1">1. Hypothesis</div>
+    <div class="step" id="step-2">2. Parsed</div>
+    <div class="step" id="step-3">3. Literature QC</div>
+    <div class="step" id="step-4">4. Protocols</div>
+    <div class="step" id="step-5">5. Materials</div>
+    <div class="step" id="step-6">6. Experiment Plan</div>
+  </div>
+
+  <!-- ── Input ── -->
+  <div class="card" id="input-card">
+    <div class="card-title">Enter a scientific hypothesis</div>
+    <div class="examples" id="examples-row">
+      <span style="font-size:0.8rem;color:#aaa;align-self:center;">Loading examples…</span>
+    </div>
+    <textarea id="hypothesis-input" placeholder="Type or paste a hypothesis, or click an example above…"></textarea>
+    <div class="actions">
+      <button class="btn btn-primary" id="submit-btn" onclick="submitQuestion()">Submit Question</button>
+      <span id="submit-error" class="error-box hidden"></span>
+    </div>
+  </div>
+
+  <!-- ── Parsed hypothesis ── -->
+  <div class="card hidden" id="parsed-card">
+    <div class="card-title">
+      Parsed Hypothesis
+      <span id="job-id-badge" class="badge badge-gray" style="font-weight:400;font-family:monospace;font-size:0.72rem;"></span>
+    </div>
+    <div class="grid-2" id="parsed-fields"></div>
+    <div class="actions">
+      <button class="btn btn-primary" id="qc-btn" onclick="runQC()">Run Literature QC</button>
+      <span id="qc-error" class="error-box hidden"></span>
+    </div>
+  </div>
+
+  <!-- ── Literature QC ── -->
+  <div class="card hidden" id="qc-card">
+    <div class="card-title">Literature QC</div>
+    <div id="qc-body"></div>
+    <div class="actions">
+      <button class="btn btn-primary" id="protocols-btn" onclick="generateProtocols()">Continue To Protocols</button>
+      <span id="protocols-error" class="error-box hidden"></span>
+    </div>
+  </div>
+
+  <!-- ── Relevant Protocols ── -->
+  <div class="card hidden" id="protocols-card">
+    <div class="card-title">Relevant Protocols</div>
+    <div id="protocols-body"></div>
+    <div class="actions">
+      <button class="btn btn-primary" id="materials-btn" onclick="generateMaterialsBudget()">Continue To Materials & Budget</button>
+      <span id="materials-error" class="error-box hidden"></span>
+    </div>
+  </div>
+
+  <!-- ── Materials & Budget ── -->
+  <div class="card hidden" id="materials-card">
+    <div class="card-title">Materials & Budget</div>
+    <div id="materials-body"></div>
+    <div class="actions">
+      <button class="btn btn-primary" id="plan-btn" onclick="generatePlan()">Generate Experiment Plan</button>
+      <span id="plan-error" class="error-box hidden"></span>
+    </div>
+  </div>
+
+  <!-- ── Experiment Plan ── -->
+  <div class="card hidden" id="plan-card">
+    <div class="card-title" id="plan-title"></div>
+    <div id="plan-meta" style="margin-bottom:1.25rem;"></div>
+    <div class="tabs" id="plan-tabs"></div>
+    <div id="plan-tab-contents"></div>
+
+    <hr class="divider">
+    <div class="card-title" style="margin-bottom:0.75rem;">Submit Scientist Review</div>
+    <div class="grid-2" style="margin-bottom:0.75rem;">
+      <div>
+        <div class="field-label">Section</div>
+        <select id="review-section">
+          <option value="protocol">Protocol</option>
+          <option value="materials">Materials</option>
+          <option value="budget">Budget</option>
+          <option value="timeline">Timeline</option>
+          <option value="validation">Validation</option>
+        </select>
+      </div>
+      <div>
+        <div class="field-label">Rating</div>
+        <div class="star-row" id="star-row">
+          <span class="star" data-v="1" onclick="setRating(1)">★</span>
+          <span class="star" data-v="2" onclick="setRating(2)">★</span>
+          <span class="star" data-v="3" onclick="setRating(3)">★</span>
+          <span class="star" data-v="4" onclick="setRating(4)">★</span>
+          <span class="star" data-v="5" onclick="setRating(5)">★</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-bottom:0.75rem;">
+      <div class="field-label">Correction <span style="color:#e11d48;">*</span></div>
+      <textarea id="review-correction" style="min-height:70px;" placeholder="Describe the correction or improvement…"></textarea>
+    </div>
+    <div style="margin-bottom:0.75rem;">
+      <div class="field-label">Annotation (optional)</div>
+      <textarea id="review-annotation" style="min-height:50px;" placeholder="Additional context…"></textarea>
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary btn-sm" id="review-btn" onclick="submitReview()">Submit Review</button>
+      <span id="review-success" class="success-msg hidden">Review saved — will inform future plans.</span>
+      <span id="review-error" class="error-box hidden"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = '';
+let jobId = null;
+let planId = null;
+let rating = 0;
+let currentStructuredParse = null;
+
+// ── Utilities ────────────────────────────────────────────────────────────────
+
+function show(id) { document.getElementById(id).classList.remove('hidden'); }
+function hide(id) { document.getElementById(id).classList.add('hidden'); }
+function el(id)   { return document.getElementById(id); }
+
+function setStep(n) {
+  for (let i = 1; i <= 6; i++) {
+    const s = el(`step-${i}`);
+    s.classList.remove('active', 'done');
+    if (i < n) s.classList.add('done');
+    else if (i === n) s.classList.add('active');
+  }
+}
+
+function setLoading(btnId, loading, idleLabel) {
+  const btn = el(btnId);
+  btn.disabled = loading;
+  btn.innerHTML = loading
+    ? `<span class="spinner"></span> Working…`
+    : idleLabel;
+}
+
+function showError(id, msg) {
+  const e = el(id);
+  e.textContent = msg;
+  e.classList.remove('hidden');
+}
+
+function clearError(id) { el(id).classList.add('hidden'); }
+
+async function apiFetch(path, method = 'GET', body = null) {
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(API + path, opts);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: res.statusText }));
+    throw new Error(err.detail || `HTTP ${res.status}`);
+  }
+  return res.json();
+}
+
+function esc(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// ── Examples ─────────────────────────────────────────────────────────────────
+
+async function loadExamples() {
+  try {
+    const examples = await apiFetch('/api/examples');
+    const row = el('examples-row');
+    row.innerHTML = '';
+    examples.forEach(ex => {
+      const btn = document.createElement('button');
+      btn.className = 'example-btn';
+      btn.textContent = ex.label;
+      btn.title = ex.plain_english;
+      btn.onclick = () => { el('hypothesis-input').value = ex.hypothesis; };
+      row.appendChild(btn);
+    });
+  } catch {
+    el('examples-row').innerHTML = '';
+  }
+}
+
+// ── Step 1: Submit question ───────────────────────────────────────────────────
+
+async function submitQuestion() {
+  clearError('submit-error');
+  const question = el('hypothesis-input').value.trim();
+  if (question.length < 12) {
+    showError('submit-error', 'Hypothesis must be at least 12 characters.');
+    return;
+  }
+  setLoading('submit-btn', true);
+  try {
+    const job = await apiFetch('/api/questions', 'POST', { question });
+    jobId = job.job_id;
+    renderParsed(job);
+    show('parsed-card');
+    setStep(2);
+    el('parsed-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (err) {
+    showError('submit-error', err.message);
+  } finally {
+    setLoading('submit-btn', false, 'Submit Question');
+  }
+}
+
+function renderParsed(job) {
+  el('job-id-badge').textContent = job.job_id.slice(0, 8) + '…';
+  const h = job.parsed_hypothesis;
+  currentStructuredParse = job.structured_parse || null;
+  const fields = [
+    ['Domain', h.domain], ['Experiment Type', h.experiment_type],
+    ['Intervention', h.intervention], ['System', h.system],
+    ['Outcome', h.outcome], ['Threshold', h.threshold],
+    ['Control', h.control], ['Mechanism', h.mechanism],
+  ];
+  el('parsed-fields').innerHTML = fields.map(([label, val]) => `
+    <div class="field">
+      <div class="field-label">${label}</div>
+      <div class="field-value">${esc(val) || '—'}</div>
+    </div>
+  `).join('');
+
+  const card = el('parsed-card');
+  let structuredBox = document.getElementById('structured-parse-box');
+  if (!structuredBox) {
+    structuredBox = document.createElement('div');
+    structuredBox.id = 'structured-parse-box';
+    structuredBox.style.marginTop = '1rem';
+    card.insertBefore(structuredBox, card.querySelector('.actions'));
+  }
+  if (currentStructuredParse) {
+    structuredBox.innerHTML = renderStructuredParseEditor(currentStructuredParse);
+    el('qc-btn').textContent = currentStructuredParse.needs_confirmation
+      ? 'Confirm Parse & Run Literature QC'
+      : 'Run Literature QC';
+  } else {
+    structuredBox.innerHTML = '';
+    el('qc-btn').textContent = 'Run Literature QC';
+  }
+}
+
+function renderStructuredParseEditor(parse) {
+  const chips = [
+    ...(parse.entities || []),
+    ...(parse.technologies || []),
+    ...(parse.secondary_fields || []),
+  ].slice(0, 12);
+  const targetDashboard = renderTargetDashboard(parse);
+  return `
+    <hr class="divider">
+    <div class="card-title" style="margin-bottom:0.6rem;">Confirm OpenAI Interpretation</div>
+    <p style="font-size:0.83rem;color:#555;line-height:1.45;margin-bottom:0.75rem;">
+      ${esc(parse.confirmation_question || 'Confirm this interpretation before Literature QC.')}
+    </p>
+    <div class="grid-2" style="margin-bottom:0.75rem;">
+      <div><div class="field-label">Primary Field</div><div class="field-value">${esc(parse.primary_field)}</div></div>
+      <div><div class="field-label">Specific Domain</div><div class="field-value">${esc(parse.specific_domain)}</div></div>
+      <div><div class="field-label">System</div><div class="field-value">${esc(parse.system)}</div></div>
+      <div><div class="field-label">Outcome</div><div class="field-value">${esc(parse.outcome)}</div></div>
+    </div>
+    ${targetDashboard}
+    ${chips.length ? `<div style="margin-bottom:0.75rem;">${chips.map(chip => `<span class="badge badge-blue" style="margin:0 0.3rem 0.3rem 0;">${esc(chip)}</span>`).join('')}</div>` : ''}
+    <details>
+      <summary style="cursor:pointer;font-size:0.8rem;font-weight:600;color:#555;">Edit structured parse JSON</summary>
+      <textarea id="structured-parse-json" style="min-height:180px;margin-top:0.6rem;font-family:monospace;font-size:0.78rem;">${esc(JSON.stringify(parse, null, 2))}</textarea>
+    </details>
+  `;
+}
+
+function targetFramework(parse) {
+  if (!parse) return [];
+  return [
+    ['Optimized Query', parse.optimized_query],
+    ['Target Subject', parse.target_subject || parse.system],
+    ['Target Goal', parse.target_goal || parse.outcome],
+    ['Methodology', parse.target_methodology],
+    ['Readout / Metric', parse.target_readout],
+    ['Parameters / Comparison', parse.target_parameters],
+  ].filter(([, val]) => String(val || '').trim());
+}
+
+function renderTargetDashboard(parse) {
+  const fields = targetFramework(parse);
+  if (!fields.length) return '';
+  return `
+    <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:6px;padding:0.75rem;margin-bottom:0.75rem;">
+      <div style="font-size:0.76rem;font-weight:600;color:#555;margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.04em;">Literature Search Target Framework</div>
+      <div class="grid-2">
+        ${fields.map(([label, val]) => `<div><div class="field-label">${label}</div><div class="field-value">${esc(val)}</div></div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ── Step 2: Literature QC ─────────────────────────────────────────────────────
+
+async function runQC() {
+  clearError('qc-error');
+  setLoading('qc-btn', true);
+  try {
+    if (currentStructuredParse?.needs_confirmation) {
+      const updated = await confirmStructuredParse();
+      renderParsed(updated);
+    }
+    const qc = await apiFetch(`/api/jobs/${jobId}/literature-qc`, 'POST');
+    renderQC(qc);
+    show('qc-card');
+    setStep(3);
+    el('qc-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (err) {
+    showError('qc-error', err.message);
+  } finally {
+    setLoading('qc-btn', false, 'Run Literature QC');
+  }
+}
+
+async function confirmStructuredParse() {
+  const editor = document.getElementById('structured-parse-json');
+  let parse = currentStructuredParse;
+  if (editor) {
+    try {
+      parse = JSON.parse(editor.value);
+    } catch {
+      throw new Error('Structured parse JSON is invalid. Fix it or resubmit the question.');
+    }
+  }
+  parse.needs_confirmation = false;
+  parse.confirmed = true;
+  const updated = await apiFetch(`/api/jobs/${jobId}/parse`, 'PATCH', { structured_parse: parse });
+  currentStructuredParse = updated.structured_parse;
+  return updated;
+}
+
+function noveltyBadge(signal) {
+  const map = {
+    not_found:          ['badge-green',  'Not Found (Novel)'],
+    similar_work_exists:['badge-yellow', 'Similar Work Exists'],
+    exact_match_found:  ['badge-red',    'Exact Match Found'],
+  };
+  const [cls, label] = map[signal] || ['badge-gray', signal];
+  return `<span class="badge ${cls}">${label}</span>`;
+}
+
+function statusBadge(status) {
+  const map = { queried: 'badge-green', error: 'badge-red', needs_key: 'badge-yellow', disabled: 'badge-gray' };
+  return `<span class="badge ${map[status] || 'badge-gray'}">${esc(status)}</span>`;
+}
+
+function renderQC(qc) {
+  const pct = Math.round(qc.confidence * 100);
+  let html = `
+    <div style="display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap;margin-bottom:1rem;">
+      ${noveltyBadge(qc.novelty_signal)}
+      <div style="flex:1;min-width:160px;">
+        <div style="font-size:0.72rem;color:#888;margin-bottom:0.3rem;">Confidence</div>
+        <div class="score-bar">
+          <div class="score-track"><div class="score-fill" style="width:${pct}%"></div></div>
+          <span style="font-size:0.82rem;font-weight:600;min-width:32px;">${pct}%</span>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:0.87rem;color:#444;margin-bottom:1rem;line-height:1.55;">${esc(qc.summary)}</p>
+  `;
+
+  if (qc.llm_paraphrased_question || qc.query_variants?.length) {
+    const variants = (qc.query_variants || []).slice(0, 12);
+    html += `
+      <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:6px;padding:0.85rem;margin-bottom:1rem;">
+        <div style="font-size:0.78rem;font-weight:600;color:#555;margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.04em;">Search Queries Sent To Sources</div>
+        ${qc.llm_paraphrased_question ? `<p style="font-size:0.82rem;color:#444;line-height:1.45;margin-bottom:0.65rem;"><strong>OpenAI paraphrase:</strong> ${esc(qc.llm_paraphrased_question)}</p>` : ''}
+        ${variants.length ? `
+          <table>
+            <thead><tr><th>Stage</th><th>Query</th></tr></thead>
+            <tbody>${variants.map(v => `
+              <tr><td>${esc(v.kind)}</td><td style="font-family:monospace;font-size:0.76rem;">${esc(v.query)}</td></tr>
+            `).join('')}</tbody>
+          </table>
+        ` : ''}
+      </div>
+    `;
+  }
+
+  const qcTargetParse = currentStructuredParse || qc.field_classification?.structured_parse;
+  const targetDashboard = renderTargetDashboard(qcTargetParse);
+  if (targetDashboard) {
+    html += targetDashboard;
+  }
+
+  if (qc.field_classification && Object.keys(qc.field_classification).length) {
+    const fc = qc.field_classification;
+    html += `
+      <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:6px;padding:0.85rem;margin-bottom:1rem;">
+        <div style="font-size:0.78rem;font-weight:600;color:#555;margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.04em;">Field Classification Used For Search</div>
+        <div class="grid-2">
+          <div><div class="field-label">Field</div><div class="field-value">${esc(fc.field)}</div></div>
+          <div><div class="field-label">Specific Domain</div><div class="field-value">${esc(fc.specific_domain)}</div></div>
+          <div><div class="field-label">Bio Protocol Sources</div><div class="field-value">${fc.use_bio_protocol_sources ? 'Yes' : 'No'}</div></div>
+          <div><div class="field-label">Classifier Confidence</div><div class="field-value">${Math.round((fc.confidence || 0) * 100)}%</div></div>
+        </div>
+      </div>
+    `;
+  }
+
+  if (qc.references?.length) {
+    html += `<div style="font-size:0.78rem;font-weight:600;color:#555;margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.04em;">Top References (${qc.references.length})</div>`;
+    html += qc.references.map(ref => {
+      const titleHtml = ref.url
+        ? `<a href="${esc(ref.url)}" target="_blank" rel="noreferrer" style="color:#4f46e5;text-decoration:none;">${esc(ref.title)}</a>`
+        : esc(ref.title);
+      const authors = ref.authors?.length
+        ? ref.authors.slice(0, 2).map(esc).join(', ') + (ref.authors.length > 2 ? ' et al.' : '')
+        : '';
+      return `
+        <div class="reference-item">
+          <div class="reference-title">${titleHtml}</div>
+          <div class="reference-meta">${esc(ref.source)}${ref.year ? ` · ${ref.year}` : ''}${authors ? ` · ${authors}` : ''}</div>
+          <div class="reference-reason">${esc(ref.relevance_reason)}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  const shownStatuses = (qc.source_statuses || []).filter(s => s.source !== 'live_source_layer');
+  if (shownStatuses.length) {
+    html += `
+      <details style="margin-top:1rem;">
+        <summary style="cursor:pointer;font-size:0.8rem;font-weight:600;color:#555;user-select:none;list-style:none;display:flex;align-items:center;gap:0.4rem;">
+          ▸ Source statuses (${shownStatuses.length})
+        </summary>
+        <table style="margin-top:0.6rem;">
+          <thead><tr><th>Source</th><th>Status</th><th>Results</th><th>Details</th></tr></thead>
+          <tbody>${shownStatuses.map(s => `
+            <tr>
+              <td>${esc(s.source)}</td>
+              <td>${statusBadge(s.status)}</td>
+              <td>${s.result_count}</td>
+              <td style="font-size:0.75rem;color:#666;">
+                ${s.queried_url ? `<a href="${esc(s.queried_url)}" target="_blank" rel="noreferrer" style="color:#4f46e5;">endpoint</a>` : ''}
+                ${s.message ? `<div>${esc(s.message)}</div>` : ''}
+              </td>
+            </tr>
+          `).join('')}</tbody>
+        </table>
+      </details>
+    `;
+  } else {
+    html += `<p style="font-size:0.82rem;color:#888;margin-top:0.75rem;">Live sources disabled — using fallback references. Set <code>AI_SCIENTIST_LIVE_QC=1</code> to enable.</p>`;
+  }
+
+  el('qc-body').innerHTML = html;
+}
+
+// ── Step 3: Relevant Protocols ────────────────────────────────────────────────
+
+async function generateProtocols() {
+  clearError('protocols-error');
+  setLoading('protocols-btn', true);
+  try {
+    const protocols = await apiFetch(`/api/jobs/${jobId}/protocols`, 'POST');
+    renderProtocols(protocols);
+    show('protocols-card');
+    setStep(4);
+    el('protocols-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (err) {
+    showError('protocols-error', err.message);
+  } finally {
+    setLoading('protocols-btn', false, 'Continue To Protocols');
+  }
+}
+
+function renderProtocols(protocols) {
+  let html = `
+    <p style="font-size:0.87rem;color:#444;margin-bottom:1rem;line-height:1.55;">${esc(protocols.summary)}</p>
+    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1rem;">
+      <span class="badge badge-gray">${protocols.evidence_count || 0} evidence items reviewed</span>
+      <span class="badge badge-blue">${(protocols.protocol_candidates || []).length} candidates</span>
+      <span class="badge badge-gray">${(protocols.tools || []).length} tools to check</span>
+      <span class="badge badge-yellow">${(protocols.consumables || []).length} consumables</span>
+    </div>
+  `;
+  if (protocols.warnings?.length) {
+    html += `<div class="error-box" style="margin-bottom:1rem;">${protocols.warnings.map(esc).join(' ')}</div>`;
+  }
+  html += renderProtocolDerivedItems('Tools To Check', protocols.tools || [], 'These are not procurement lines yet. Confirm availability, calibration, booking, and operator requirements.');
+  html += renderProtocolDerivedItems('Consumables For Procurement Planning', protocols.consumables || [], 'These are passed forward to Materials & Budget for supplier and cost checks.');
+  html += (protocols.protocol_candidates || []).map((candidate, idx) => `
+    <div class="reference-item" style="padding:1rem 0;">
+      <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;margin-bottom:0.3rem;">
+        <span class="badge badge-gray">${idx + 1}</span>
+        <span class="badge badge-blue">${esc(candidate.evidence_quality || 'adapted')}</span>
+        ${candidate.source_type ? `<span class="badge badge-gray">${esc(candidate.source_type)}</span>` : ''}
+      </div>
+      <div class="reference-title">${esc(candidate.title)}</div>
+      ${candidate.source_url ? `<div class="reference-meta"><a href="${esc(candidate.source_url)}" target="_blank" rel="noreferrer" style="color:#4f46e5;text-decoration:none;">${esc(candidate.source_title || candidate.source_url)}</a></div>` : ''}
+      ${candidate.relevance_reason ? `<div class="reference-reason">${esc(candidate.relevance_reason)}</div>` : ''}
+      ${renderProtocolList('Adapted Steps', candidate.adapted_steps)}
+      ${renderProtocolDerivedItems('Candidate Tools', candidate.tools || [], 'Reusable tools/equipment from this protocol candidate; user checks availability rather than procurement.')}
+      ${renderProtocolDerivedItems('Candidate Consumables', candidate.consumables || [], 'Consumable inputs from this protocol candidate; these can feed materials and budget planning.')}
+      ${renderProtocolList('Validation Checks', candidate.validation_checks)}
+      ${renderProtocolList('Limitations', candidate.limitations)}
+      ${candidate.citations?.length ? `<div style="font-size:0.75rem;color:#666;margin-top:0.45rem;">Citations: ${candidate.citations.map(c => `<a href="${esc(c)}" target="_blank" rel="noreferrer" style="color:#4f46e5;">source</a>`).join(' · ')}</div>` : ''}
+    </div>
+  `).join('') || '<p style="color:#888;font-size:0.85rem;">No protocol candidates returned.</p>';
+  el('protocols-body').innerHTML = html;
+}
+
+function renderProtocolDerivedItems(label, items, note) {
+  if (!items?.length) return '';
+  return `
+    <div style="margin:0.85rem 0 1rem;">
+      <div class="field-label">${esc(label)}</div>
+      <p style="font-size:0.75rem;color:#777;margin:0.2rem 0 0.4rem;">${esc(note)}</p>
+      <table>
+        <thead><tr><th>Item</th><th>Category</th><th>Action</th><th>Source</th></tr></thead>
+        <tbody>${items.map(item => `
+          <tr>
+            <td><strong>${esc(item.name)}</strong>${item.specification ? `<div style="font-size:0.74rem;color:#555;">Spec: ${esc(item.specification)}</div>` : ''}<div style="font-size:0.74rem;color:#777;">${esc(item.rationale || '')}</div></td>
+            <td>${esc(item.category || '')}</td>
+            <td>${item.procurement_required ? '<span class="badge badge-yellow">procurement candidate</span>' : '<span class="badge badge-gray">user check only</span>'}</td>
+            <td>${item.source_url ? `<a href="${esc(item.source_url)}" target="_blank" rel="noreferrer" style="color:#4f46e5;">source</a>` : esc(item.source_protocol_title || '')}</td>
+          </tr>
+        `).join('')}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderProtocolList(label, items) {
+  if (!items?.length) return '';
+  return `
+    <div style="margin-top:0.6rem;">
+      <div class="field-label">${label}</div>
+      <ul style="margin-left:1.1rem;margin-top:0.25rem;font-size:0.82rem;color:#555;line-height:1.45;">
+        ${items.map(item => `<li>${esc(item)}</li>`).join('')}
+      </ul>
+    </div>
+  `;
+}
+
+// ── Step 4: Materials & Budget ────────────────────────────────────────────────
+
+async function generateMaterialsBudget() {
+  clearError('materials-error');
+  setLoading('materials-btn', true);
+  try {
+    const proposal = await apiFetch(`/api/jobs/${jobId}/materials-budget`, 'POST');
+    renderMaterialsBudget(proposal);
+    show('materials-card');
+    setStep(5);
+    el('materials-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (err) {
+    showError('materials-error', err.message);
+  } finally {
+    setLoading('materials-btn', false, 'Continue To Materials & Budget');
+  }
+}
+
+function renderMaterialsBudget(proposal) {
+  const total = proposal.total_budget_estimate || { amount: 0, currency: 'GBP' };
+  let html = `
+    <p style="font-size:0.87rem;color:#444;margin-bottom:1rem;line-height:1.55;">${esc(proposal.summary)}</p>
+    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1rem;">
+      <span class="badge badge-blue">${esc(total.currency || 'GBP')} ${Number(total.amount || 0).toLocaleString()}</span>
+      <span class="badge badge-gray">${esc(proposal.overall_confidence || 'low')} confidence</span>
+      <span class="badge badge-gray">${proposal.evidence_count || 0} supplier evidence items</span>
+    </div>
+  `;
+  if (proposal.warnings?.length) {
+    html += `<div class="error-box" style="margin-bottom:1rem;">${proposal.warnings.map(esc).join(' ')}</div>`;
+  }
+  html += renderMaterialsTable(proposal.materials || []);
+  html += renderBudgetTable(proposal.budget_lines || []);
+  html += '<p style="font-size:0.78rem;color:#666;margin-top:0.75rem;">Timeline and validation gates are generated in the Experiment Plan stage after accepting the material plan.</p>';
+  if (proposal.supplier_evidence?.length) {
+    html += `
+      <details style="margin-top:1rem;">
+        <summary style="cursor:pointer;font-size:0.8rem;font-weight:600;color:#555;">Supplier evidence (${proposal.supplier_evidence.length})</summary>
+        <table style="margin-top:0.6rem;">
+          <thead><tr><th>Supplier</th><th>Evidence</th><th>Status</th><th>Source</th></tr></thead>
+          <tbody>${proposal.supplier_evidence.map(e => `
+            <tr>
+              <td>${esc(e.supplier)}</td>
+              <td>${evidenceTypeBadge(e.evidence_type)}<div style="font-size:0.74rem;color:#777;">${esc(e.message)}</div></td>
+              <td>${statusBadge(e.status || 'unknown')}</td>
+              <td>${e.url ? `<a href="${esc(e.url)}" target="_blank" rel="noreferrer" style="color:#4f46e5;">source</a>` : ''}</td>
+            </tr>
+          `).join('')}</tbody>
+        </table>
+      </details>
+    `;
+  }
+  el('materials-body').innerHTML = html;
+}
+
+function trustBadge(item) {
+  if (item.needs_manual_verification) return '<span class="badge badge-yellow">needs manual verification</span>';
+  if (item.evidence_type === 'api_result') return '<span class="badge badge-green">API verified</span>';
+  if (item.evidence_type === 'tavily_product_candidate') return '<span class="badge badge-blue">Tavily candidate</span>';
+  return `<span class="badge badge-gray">${esc(item.evidence_type || 'estimated')}</span>`;
+}
+
+function quoteBadge(item) {
+  const value = item.quote_confidence || 'manual_quote_required';
+  if (value === 'api_verified') return '<span class="badge badge-green">quote API verified</span>';
+  if (value === 'candidate') return '<span class="badge badge-blue">quote candidate</span>';
+  if (value === 'none') return '<span class="badge badge-gray">no quote</span>';
+  return '<span class="badge badge-yellow">manual quote required</span>';
+}
+
+function evidenceTypeBadge(type) {
+  if (type === 'api_result') return '<span class="badge badge-green">API result</span>';
+  if (type === 'tavily_product_candidate') return '<span class="badge badge-blue">Tavily product candidate</span>';
+  if (['catalog_page', 'protocol_page', 'application_note'].includes(type)) return `<span class="badge badge-yellow">${esc(type)}</span>`;
+  return `<span class="badge badge-gray">${esc(type || 'estimated')}</span>`;
+}
+
+function renderMaterialsTable(items) {
+  if (!items.length) return '<p style="color:#888;font-size:0.85rem;">No materials returned.</p>';
+  return `
+    <div class="field-label" style="margin-top:1rem;">Materials And Supply Chain</div>
+    <table>
+      <thead><tr><th>Item</th><th>Supplier</th><th>Catalog</th><th>Cost</th><th>Trust</th></tr></thead>
+      <tbody>${items.map(item => `
+        <tr>
+          <td><strong>${esc(item.name)}</strong><div style="font-size:0.75rem;color:#666;">${esc(item.rationale)}</div></td>
+          <td>${esc(item.supplier || 'TBD')}</td>
+          <td>${esc(item.catalog_number || 'TBD')}${item.source_url ? `<div><a href="${esc(item.source_url)}" target="_blank" rel="noreferrer" style="color:#4f46e5;">source</a></div>` : ''}</td>
+          <td>${esc(item.currency || 'GBP')} ${Number(item.total_cost_estimate || 0).toLocaleString()}<div style="font-size:0.74rem;color:#777;">${esc(item.cost_confidence)} cost confidence</div></td>
+          <td>${trustBadge(item)}<div style="margin-top:0.25rem;">${quoteBadge(item)}</div></td>
+        </tr>
+      `).join('')}</tbody>
+    </table>
+  `;
+}
+
+function renderBudgetTable(items) {
+  if (!items.length) return '';
+  return `
+    <div class="field-label" style="margin-top:1rem;">Budget</div>
+    <table>
+      <thead><tr><th>Category</th><th>Item</th><th>Quantity</th><th>Total</th><th>Confidence</th></tr></thead>
+      <tbody>${items.map(item => `
+        <tr>
+          <td>${esc(item.category)}</td>
+          <td>${esc(item.item)}<div style="font-size:0.75rem;color:#666;">${esc(item.notes)}</div></td>
+          <td>${esc(item.quantity)}</td>
+          <td>${esc(item.currency || 'GBP')} ${Number(item.total_cost_estimate || 0).toLocaleString()}</td>
+          <td>${esc(item.cost_confidence)}${item.needs_manual_verification ? ' · verify' : ''}<div style="margin-top:0.25rem;">${quoteBadge(item)}</div></td>
+        </tr>
+      `).join('')}</tbody>
+    </table>
+  `;
+}
+
+function renderTimelineTable(items) {
+  if (!items.length) return '';
+  return `
+    <div class="field-label" style="margin-top:1rem;">Timeline</div>
+    ${items.map(item => `
+      <div class="step-item">
+        <div class="step-num">${item.critical_path ? '!' : '•'}</div>
+        <div class="step-body">
+          <div class="step-phase">${esc(item.phase)} · ${esc(item.duration)}</div>
+          <div class="step-desc">${esc(item.deliverable)}</div>
+          ${item.dependencies?.length ? `<div class="step-qc">Depends on: ${item.dependencies.map(esc).join(', ')}</div>` : ''}
+          ${item.risk_notes ? `<div style="font-size:0.75rem;color:#854d0e;margin-top:0.25rem;">${esc(item.risk_notes)}</div>` : ''}
+        </div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function renderValidationTable(items) {
+  if (!items.length) return '';
+  return `
+    <div class="field-label" style="margin-top:1rem;">Validation Approach</div>
+    <table>
+      <thead><tr><th>Metric</th><th>Method</th><th>Success</th><th>Failure</th><th>Controls</th></tr></thead>
+      <tbody>${items.map(item => `
+        <tr>
+          <td>${esc(item.metric)}</td>
+          <td>${esc(item.method)}</td>
+          <td>${esc(item.success_threshold)}</td>
+          <td>${esc(item.failure_criteria)}</td>
+          <td>${(item.controls || []).map(esc).join(', ')}</td>
+        </tr>
+      `).join('')}</tbody>
+    </table>
+  `;
+}
+
+// ── Step 5: Generate Plan ─────────────────────────────────────────────────────
+
+async function generatePlan() {
+  clearError('plan-error');
+  setLoading('plan-btn', true);
+  try {
+    const plan = await apiFetch(`/api/jobs/${jobId}/plans`, 'POST');
+    planId = plan.plan_id;
+    renderPlan(plan);
+    show('plan-card');
+    setStep(6);
+    el('plan-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (err) {
+    showError('plan-error', err.message);
+  } finally {
+    setLoading('plan-btn', false, 'Generate Experiment Plan');
+  }
+}
+
+function renderPlan(plan) {
+  el('plan-title').innerHTML = `
+    ${esc(plan.title)}
+    <span class="badge badge-gray" style="font-weight:400;">${esc(plan.domain)}</span>
+  `;
+
+  const budget = plan.estimated_total_budget;
+  const readinessPct = Math.round(plan.readiness_score * 100);
+  el('plan-meta').innerHTML = `
+    <div style="display:flex;gap:2rem;flex-wrap:wrap;align-items:flex-end;">
+      <div><div class="field-label">Total Budget</div><div class="field-value" style="font-size:1rem;font-weight:600;">${esc(budget.currency)} ${budget.amount.toLocaleString()}</div></div>
+      <div><div class="field-label">Duration</div><div class="field-value">${esc(plan.estimated_duration)}</div></div>
+      <div style="flex:1;min-width:160px;"><div class="field-label">Readiness Score</div>
+        <div class="score-bar" style="margin-top:0.35rem;">
+          <div class="score-track"><div class="score-fill" style="width:${readinessPct}%"></div></div>
+          <span style="font-size:0.82rem;font-weight:600;min-width:32px;">${readinessPct}%</span>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const tabs = [
+    { id: 'protocol',    label: `Protocol (${plan.protocol_steps?.length ?? 0})` },
+    { id: 'materials',   label: `Materials (${plan.materials?.length ?? 0})` },
+    { id: 'budget',      label: 'Budget' },
+    { id: 'timeline',    label: `Timeline (${plan.timeline_phases?.length ?? 0})` },
+    { id: 'validation',  label: `Validation (${plan.validation?.length ?? 0})` },
+    { id: 'assumptions', label: 'Assumptions & Risks' },
+  ];
+  if (plan.feedback_applied?.length) {
+    tabs.push({ id: 'feedback', label: `Feedback Applied (${plan.feedback_applied.length})` });
+  }
+
+  el('plan-tabs').innerHTML = tabs.map((t, i) =>
+    `<button class="tab${i === 0 ? ' active' : ''}" id="tab-${t.id}" onclick="switchTab('${t.id}')">${t.label}</button>`
+  ).join('');
+
+  el('plan-tab-contents').innerHTML = tabs.map((t, i) =>
+    `<div class="tab-content${i === 0 ? ' active' : ''}" id="content-${t.id}">${renderTabContent(t.id, plan)}</div>`
+  ).join('');
+}
+
+function switchTab(id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  el(`tab-${id}`).classList.add('active');
+  el(`content-${id}`).classList.add('active');
+}
+
+function renderTabContent(id, plan) {
+  if (id === 'protocol') {
+    return (plan.protocol_steps || []).map(s => `
+      <div class="step-item">
+        <div class="step-num">${s.step_number}</div>
+        <div class="step-body">
+          <div class="step-phase">${esc(s.phase)} · ${esc(s.duration)}</div>
+          <div class="step-title-text">${esc(s.title)}</div>
+          <div class="step-desc">${esc(s.description)}</div>
+          ${s.quality_checks?.length ? `<div class="step-qc">✓ ${s.quality_checks.map(esc).join(' · ')}</div>` : ''}
+        </div>
+      </div>
+    `).join('') || '<p style="color:#888;font-size:0.85rem;">No steps.</p>';
+  }
+
+  if (id === 'materials') {
+    return `
+      <table>
+        <thead><tr><th>Item</th><th>Category</th><th>Supplier</th><th>Cat #</th><th>Qty</th><th>Cost (GBP)</th></tr></thead>
+        <tbody>${(plan.materials || []).map(m => `
+          <tr>
+            <td>${esc(m.name)}</td>
+            <td>${esc(m.category)}</td>
+            <td>${esc(m.supplier)}</td>
+            <td style="font-family:monospace;font-size:0.78rem;">${esc(m.catalog_number)}</td>
+            <td>${esc(m.quantity)}</td>
+            <td>${m.total_cost.toLocaleString()}</td>
+          </tr>
+        `).join('')}</tbody>
+      </table>
+    `;
+  }
+
+  if (id === 'budget') {
+    const lines = plan.budget_lines || [];
+    const total = lines.reduce((s, l) => s + l.total_cost, 0);
+    return `
+      <table>
+        <thead><tr><th>Category</th><th>Item</th><th>Qty</th><th>Unit (GBP)</th><th>Total (GBP)</th><th>Notes</th></tr></thead>
+        <tbody>
+          ${lines.map(l => `
+            <tr>
+              <td>${esc(l.category)}</td>
+              <td>${esc(l.item)}</td>
+              <td>${esc(l.quantity)}</td>
+              <td>${l.unit_cost.toLocaleString()}</td>
+              <td>${l.total_cost.toLocaleString()}</td>
+              <td style="color:#666;">${esc(l.notes)}</td>
+            </tr>
+          `).join('')}
+          <tr style="font-weight:600;background:#f9fafb;">
+            <td colspan="4">Total</td>
+            <td>GBP ${total.toLocaleString()}</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+  }
+
+  if (id === 'timeline') {
+    return `
+      <table>
+        <thead><tr><th>Phase</th><th>Duration</th><th>Gate</th><th>Risks / blockers</th><th>Critical</th></tr></thead>
+        <tbody>${(plan.timeline_phases || []).map(p => `
+          <tr>
+            <td style="font-weight:500;">${esc(p.phase)}${p.owner ? `<div style="font-size:0.72rem;color:#777;">Owner: ${esc(p.owner)}</div>` : ''}</td>
+            <td>${esc(p.duration)}${p.start_condition ? `<div style="font-size:0.72rem;color:#777;">Start: ${esc(p.start_condition)}</div>` : ''}</td>
+            <td style="color:#555;">${esc(p.deliverable)}${p.go_no_go_criteria ? `<div style="font-size:0.72rem;color:#166534;margin-top:0.2rem;">Gate: ${esc(p.go_no_go_criteria)}</div>` : ''}</td>
+            <td style="color:#555;">${esc(p.risk_notes || '')}${p.blocking_items?.length ? `<div style="font-size:0.72rem;color:#854d0e;margin-top:0.2rem;">Blocks: ${p.blocking_items.map(esc).join(', ')}</div>` : ''}</td>
+            <td style="text-align:center;">${p.critical_path ? '<span style="color:#dc2626;font-size:1rem;">●</span>' : ''}</td>
+          </tr>
+        `).join('')}</tbody>
+      </table>
+    `;
+  }
+
+  if (id === 'validation') {
+    return (plan.validation || []).map(v => `
+      <div style="padding:0.8rem 0;border-bottom:1px solid #f3f4f6;">
+        <div style="font-weight:600;font-size:0.9rem;margin-bottom:0.5rem;">${esc(v.metric)}</div>
+        <div class="grid-2" style="gap:0.5rem;">
+          <div><div class="field-label">Method</div><div class="field-value">${esc(v.method)}</div></div>
+          <div><div class="field-label">Success</div><div class="field-value" style="color:#16a34a;">${esc(v.success_threshold)}</div></div>
+          <div><div class="field-label">Failure</div><div class="field-value" style="color:#dc2626;">${esc(v.failure_criteria)}</div></div>
+          <div><div class="field-label">Controls</div><div class="field-value">${v.controls.map(esc).join(', ')}</div></div>
+          <div><div class="field-label">Replicates</div><div class="field-value">${esc(v.sample_size_or_replicates || 'TBD')}</div></div>
+          <div><div class="field-label">Analysis</div><div class="field-value">${esc(v.statistical_test || 'TBD')}</div></div>
+          <div><div class="field-label">Timepoint</div><div class="field-value">${esc(v.measurement_timepoint || 'TBD')}</div></div>
+          <div><div class="field-label">Linked Step</div><div class="field-value">${esc(v.linked_protocol_step || 'TBD')}</div></div>
+        </div>
+      </div>
+    `).join('') || '<p style="color:#888;font-size:0.85rem;">No validation criteria.</p>';
+  }
+
+  if (id === 'assumptions') {
+    return `
+      <div style="margin-bottom:1.25rem;">
+        <div class="field-label" style="margin-bottom:0.5rem;">Assumptions</div>
+        <ul style="list-style:disc;padding-left:1.25rem;">
+          ${(plan.assumptions || []).map(a => `<li style="font-size:0.87rem;margin-bottom:0.3rem;line-height:1.45;">${esc(a)}</li>`).join('')}
+        </ul>
+      </div>
+      <div>
+        <div class="field-label" style="margin-bottom:0.5rem;">Risks</div>
+        <ul style="list-style:disc;padding-left:1.25rem;">
+          ${(plan.risks || []).map(r => `<li style="font-size:0.87rem;margin-bottom:0.3rem;line-height:1.45;color:#b45309;">${esc(r)}</li>`).join('')}
+        </ul>
+      </div>
+    `;
+  }
+
+  if (id === 'feedback') {
+    return (plan.feedback_applied || []).map(f => `
+      <div style="padding:0.65rem 0;border-bottom:1px solid #f3f4f6;">
+        <span class="badge badge-blue" style="margin-bottom:0.35rem;">${esc(f.section)}</span>
+        <div style="font-size:0.87rem;margin-top:0.25rem;">${esc(f.correction)}</div>
+        ${f.annotation ? `<div style="font-size:0.8rem;color:#666;margin-top:0.2rem;">${esc(f.annotation)}</div>` : ''}
+      </div>
+    `).join('') || '<p style="color:#888;font-size:0.85rem;">No feedback applied.</p>';
+  }
+
+  return '';
+}
+
+// ── Step 4: Review ────────────────────────────────────────────────────────────
+
+function setRating(n) {
+  rating = n;
+  document.querySelectorAll('.star').forEach(s => {
+    s.classList.toggle('on', parseInt(s.dataset.v) <= n);
+  });
+}
+
+async function submitReview() {
+  hide('review-success');
+  clearError('review-error');
+  if (!planId) return;
+  if (rating === 0) { showError('review-error', 'Please select a star rating.'); return; }
+  const correction = el('review-correction').value.trim();
+  if (correction.length < 2) { showError('review-error', 'Correction must be at least 2 characters.'); return; }
+  setLoading('review-btn', true);
+  try {
+    await apiFetch(`/api/plans/${planId}/reviews`, 'POST', {
+      section: el('review-section').value,
+      rating,
+      correction,
+      annotation: el('review-annotation').value.trim(),
+    });
+    show('review-success');
+    el('review-correction').value = '';
+    el('review-annotation').value = '';
+    setRating(0);
+  } catch (err) {
+    showError('review-error', err.message);
+  } finally {
+    setLoading('review-btn', false, 'Submit Review');
+  }
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+loadExamples();
+</script>
+</body>
+</html>
