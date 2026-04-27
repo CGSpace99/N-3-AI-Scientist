@@ -1,5 +1,18 @@
 # HackNation AI Scientist
 
+This is a **24-hour** hackathon project, competed in the **5th HackNation AI** (25–26 April 2026).
+
+## Product video
+
+<video width="100%" controls playsinline>
+  <source src="Video/hacknation1.mp4" type="video/mp4" />
+  Your browser does not support inline video. <a href="Video/hacknation1.mp4">Open or download the MP4</a>.
+</video>
+
+[Open the product video on GitHub](Video/hacknation1.mp4) if the player above does not load.
+
+---
+
 HackNation AI Scientist is a hypothesis-to-protocol planning demo. It takes a raw scientific idea and moves it through three specialist agents: Rachael validates the science, Eric turns the science into lab logistics and procurement, and Faith synthesizes the final execution-ready protocol.
 
 The project is built as a Next.js frontend backed by a FastAPI service with SQLite persistence. The backend can run with deterministic fallbacks for demos, or use optional OpenAI, Anthropic, Tavily, and literature-source credentials for richer search, ranking, and cost estimation.
