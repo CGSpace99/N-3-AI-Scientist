@@ -9,7 +9,7 @@ This is a **24-hour** hackathon project, competed in the **5th HackNation AI** (
   Your browser does not support inline video. <a href="Video/hacknation1.mp4">Open or download the MP4</a>.
 </video>
 
-[Open the product video on GitHub](Video/hacknation1.mp4) if the player above does not load.
+[Open the product video on GitHub](Video/hacknation1.mp4) if the player above does not load. The inline player uses a small web-friendly file so GitHub can show it. **1080p originals:** [hacknation1-1080p.mp4](Video/hacknation1-1080p.mp4) · [Hacknation2video-1080p.mp4](Video/Hacknation2video-1080p.mp4). Smaller web copies: [hacknation1.mp4](Video/hacknation1.mp4), [Hacknation2video.mp4](Video/Hacknation2video.mp4).
 
 ---
 
