@@ -2,7 +2,11 @@
 
 This is a **24-hour** hackathon project, competed in the **5th HackNation AI** (25–26 April 2026).
 
-## Product video
+## Product demo
+
+Screen recording and live UI, in the same workflow the app uses: **Rachael** (science and literature) → **Eric** (logistics, inventory, and procurement) → **Faith** (final plan and feedback).
+
+### Demo video
 
 <video width="100%" controls playsinline>
   <source src="Video/hacknation1.mp4" type="video/mp4" />
@@ -10,6 +14,20 @@ This is a **24-hour** hackathon project, competed in the **5th HackNation AI** (
 </video>
 
 [Open the product video on GitHub](Video/hacknation1.mp4) if the player above does not load. The inline player uses a small web-friendly file so GitHub can show it. **1080p originals:** [hacknation1-1080p.mp4](Video/hacknation1-1080p.mp4) · [Hacknation2video-1080p.mp4](Video/Hacknation2video-1080p.mp4). Smaller web copies: [hacknation1.mp4](Video/hacknation1.mp4), [Hacknation2video.mp4](Video/Hacknation2video.mp4).
+
+### Interface (workflow order)
+
+Rachael (hypothesis, literature, and side panels as you move through the stream):
+
+![Rachael – chat and literature / hypothesis context](Video/ui-rachael.png)
+
+Eric (protocol, tools, and procurement):
+
+![Eric – protocol and budget-focused UI](Video/ui-eric.png)
+
+Faith (final plan and follow-up prompt):
+
+![Faith – execution-ready plan and feedback](Video/ui-faith.png)
 
 ---
 
